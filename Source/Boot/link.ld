@@ -1,16 +1,17 @@
 ENTRY(_start)
 
-OUTPUT_FORMAT(binary)
+OUTPUT_FORMAT(elf64-x86-64)
 
 INPUT
 (
-    boot.o
+    bin/boot.o
 )
 
 OUTPUT
 (
-    boot.bin
+    bin/boot.elf
 )
+
 
 SECTIONS
 {
