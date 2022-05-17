@@ -14,6 +14,11 @@ _start:
 	movb $0x03, %al
 	int $0x10
 
+	# disabling cursor
+	movb $0x01, %ah
+	movb $0x3f, %ch
+	int $0x10
+
 	# print hello world
 	pushw $hello		# $ get pointer of
 	pushw hellosize		# get value of
@@ -23,13 +28,13 @@ _start:
 	addw $4, %sp
 
 	# read disk 
-	pushw bmain		# pointer to buffer
+	pushw bmain16		# pointer to buffer
 	pushw $4		# count of sectors to read
 	call rdisk
 
 	addw $4, %sp
 
-	jmp *bmain
+	jmp *bmain16
 
 	hlt
 
@@ -39,7 +44,7 @@ hello: .asciz "Hello, BIOS world!"
 hellosize: .word .-hello-1
 
 # basic main
-bmain: .word 0x7e00	# buffer for readed code of programm
+bmain16: .word 0x7e00	# buffer for readed code of programm
 
 .include "bprintln.s"
 .include "rdisk.s"

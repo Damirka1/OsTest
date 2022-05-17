@@ -1,7 +1,7 @@
 # basic main loaded from bios
 .code16
 .section .text
-_bmain16:
+bmain16:
 
     # print enter message
     pushw $hello
@@ -106,12 +106,34 @@ bmain32:
 
     # now we are in compatibility mode
 
+    # editing gdt
+    movl $0b10101111, (gdt_codedesc + 6)
+    movl $0b10101111, (gdt_datadesc + 6)
+
+    # entering 64 bit main
+    jmp $0x08, bmain
 
     hlt
 
 no_long_mode:
+    # just for debugging
     movl $0x11111111, %eax
     hlt
 
-.space 2048-(.-_bmain16)
+.code64
+.section .text
+bmain:
+    movl $0xb8000, %edi
+    # now cpu is in long mode (64 bit)
+
+
+    # clear screen with blue color
+    movq $0x1f201f201f201f20, %rax
+    movl $500, %ecx
+    rep stosq
+
+    
+    hlt
+
+.space 2048-(.-bmain16)
 
