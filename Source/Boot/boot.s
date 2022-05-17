@@ -29,7 +29,7 @@ _start:
 
 	# read disk 
 	pushw bmain16		# pointer to buffer
-	pushw $4		# count of sectors to read
+	pushw $8		# count of sectors to read
 	call rdisk
 
 	addw $4, %sp

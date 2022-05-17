@@ -1,7 +1,6 @@
 # Base function to print in bios state
 
 # parameters (1 - ptr to str, 2 - str length)
-
 line: .byte 0
 column: .byte 0
 

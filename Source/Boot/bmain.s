@@ -1,8 +1,8 @@
 # basic main loaded from bios
 .code16
 .section .text
+.globl bmain16;
 bmain16:
-
     # print enter message
     pushw $hello
     pushw hellosize
@@ -35,6 +35,7 @@ hellosize: .word .-hello-1
 
 .code32
 .section .text
+.globl bmain32;
 bmain32:
     # setting data registers
     movw dataseg, %ax
@@ -122,18 +123,17 @@ no_long_mode:
 
 .code64
 .section .text
+.globl bmain;
 bmain:
     movl $0xb8000, %edi
     # now cpu is in long mode (64 bit)
 
+    # executong kernel from c code
+    call kernel
 
-    # clear screen with blue color
-    movq $0x1f201f201f201f20, %rax
-    movl $500, %ecx
-    rep stosq
-
-    
     hlt
+
+
 
 .space 2048-(.-bmain16)
 

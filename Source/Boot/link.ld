@@ -6,6 +6,7 @@ INPUT
 (
     bin/boot.o
     bin/bmain.o
+    bin/kernel.o
 )
 
 OUTPUT
