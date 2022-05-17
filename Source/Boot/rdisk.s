@@ -6,9 +6,6 @@
 msg_error: .asciz "Can't read disk"
 msg_error_size: .word .-msg_error-1
 
-msg_success: .asciz "Disk readed successful!"
-msg_success_size: .word .-msg_success-1
-
 rdisk:
     pushw %bp
     movw %sp, %bp
@@ -25,11 +22,6 @@ rdisk:
     int $0x13
 
     jc rdisk_failed
-
-    # print success message
-    pushw $msg_success
-    pushw msg_success_size
-    call bprintln
 
     movw %bp, %sp
     popw %bp

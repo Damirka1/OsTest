@@ -2,6 +2,7 @@
 
 .section .text 
 	.globl _start;
+	.globl bprintln;
 	
 _start:
 	// setting stack
@@ -18,10 +19,17 @@ _start:
 	pushw hellosize		# get value of
 	call bprintln
 
+	# free stack
+	addw $4, %sp
+
 	# read disk 
-	pushw programm	# pointer to buffer
+	pushw bmain		# pointer to buffer
 	pushw $4		# count of sectors to read
 	call rdisk
+
+	addw $4, %sp
+
+	jmp *bmain
 
 	hlt
 
@@ -30,7 +38,8 @@ _start:
 hello: .asciz "Hello, BIOS world!"
 hellosize: .word .-hello-1
 
-programm: .word 0x7e00	# buffer for readed code of programm
+# basic main
+bmain: .word 0x7e00	# buffer for readed code of programm
 
 .include "bprintln.s"
 .include "rdisk.s"
