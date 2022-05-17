@@ -4,40 +4,37 @@
 	.globl _start;
 	
 _start:
-	// Set graphics type
+	// setting stack
+	movw $0x7c00, %bp
+	movw %bp, %sp
+
+	// Set graphics type  80x25 text mode, color
 	movb $0x00, %ah
 	movb $0x03, %al
 	int $0x10
 
-	// Set cursor type
-	movb $0x01, %ah
-	movb $0x0D, %ch # start
-	movb $0x0E, %cl # end
-	int $0x10
+	# print hello world
+	pushw $hello		# $ get pointer of
+	pushw hellosize		# get value of
+	call bprintln
 
-	// Set cursor position
-	movb $0x02, %ah
-	movb $0x00, %bh
-	movb $0x00, %dh
-	movb $0x00, %dl
-	int $0x10
+	# read disk 
+	pushw programm	# pointer to buffer
+	pushw $4		# count of sectors to read
+	call rdisk
 
-	movw $0x7c00, %bp
-	movw %bp, %sp
-
-	pushw $hello
-	pushw $18
-
-	call bprint
-	
 	hlt
 
 
 
 hello: .asciz "Hello, BIOS world!"
+hellosize: .word .-hello-1
 
-.include "bprint.s"
+programm: .word 0x7e00	# buffer for readed code of programm
 
-	.space 510-(.-_start)
+.include "bprintln.s"
+.include "rdisk.s"
+
+.space 510-(.-_start)
 
 .word 0xaa55 

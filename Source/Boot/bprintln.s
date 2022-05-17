@@ -1,7 +1,11 @@
 # Base function to print in bios state
 
 # parameters (1 - ptr to str, 2 - str length)
-bprint:
+
+line: .byte 0
+column: .byte 0
+
+bprintln:
 	pushw %bp
 	movw %sp, %bp
 	
@@ -19,11 +23,18 @@ bprint:
 
 	movw (%bp), %bp		# load address to bp
 
+	movb line, %dh
+	movb column, %dl
+
 	int $0x10
 
 	popw %bp
 
 	addw $4, %sp
+
+	# setting new line
+	addb $1, %dh
+	movb %dh, line
 
 	movw %bp, %sp
 	popw %bp
