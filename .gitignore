@@ -1,0 +1,6 @@
+# Project exclude paths
+/Output/
+/Sumulation/
+/Source/Boot/bin/
+/Source/Kernel/bin/
+
