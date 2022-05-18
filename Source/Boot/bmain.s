@@ -3,11 +3,6 @@
 .section .text
 .globl bmain16;
 bmain16:
-    # print enter message
-    pushw $hello
-    pushw hellosize
-    call bprintln
-
     # disable interrups
     cli
 
@@ -23,13 +18,10 @@ bmain16:
     movl %cr0, %eax
     orl 1, %eax
     movl %eax, %cr0
-    
+
     # jump to 32 bit basic main
-    jmp $0x08, bmain32
+    jmp 0x08, bmain32
 
-
-hello: .asciz "  Excecuting basic main"
-hellosize: .word .-hello-1
 
 .include "gdt.s"
 
@@ -45,7 +37,12 @@ bmain32:
     movw %ax, %fs
     movw %ax, %gs
 
-    # now enabling long mode (64 bit)
+    # setting stack pointer
+    movw %0x08, %ebp
+    movw %ebp, %esp
+
+    # now we are in protected cpu mode
+    # next step is enabling long mode (64 bit)
 
     # detecting cpuid
     pushfl
@@ -126,10 +123,15 @@ no_long_mode:
 .globl bmain;
 bmain:
     movl $0xb8000, %edi
+
     # now cpu is in long mode (64 bit)
 
-    # executong kernel from c code
-    call kernel
+    #mov $0x1F201F201F201F20, %rax
+    #mov $500, %ecx
+    #rep stosq
+
+    # executing kernel
+    call kernel_main
 
     hlt
 

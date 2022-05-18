@@ -1,9 +1,6 @@
 .code16
-
 .section .text 
-	.globl _start;
-	.globl bprintln;
-	
+.globl _start;
 _start:
 	// setting stack
 	movw $0x7c00, %bp
@@ -29,7 +26,7 @@ _start:
 
 	# read disk 
 	pushw bmain16		# pointer to buffer
-	pushw $8		# count of sectors to read
+	pushw $16		# count of sectors to read
 	call rdisk
 
 	addw $4, %sp
@@ -39,12 +36,11 @@ _start:
 	hlt
 
 
-
 hello: .asciz "Hello, BIOS world!"
 hellosize: .word .-hello-1
 
 # basic main
-bmain16: .word 0x7e00	# buffer for readed code of programm
+bmain16: .word 0x8000	# buffer for readed code of programm
 
 .include "bprintln.s"
 .include "rdisk.s"

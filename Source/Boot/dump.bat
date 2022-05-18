@@ -1,1 +1,1 @@
-llvm-objdump -d bin/boot.elf
+llvm-objdump -d bin/kernel.elf

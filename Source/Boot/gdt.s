@@ -23,7 +23,7 @@ gdt_descriptor:
         .word gtd_end - gdt_nulldesc - 1
         .long gdt_nulldesc
 
-codeseg:
+codeseg: 
     .word gdt_codedesc - gdt_nulldesc
-dataseg:
+dataseg: 
     .word gdt_datadesc - gdt_nulldesc
