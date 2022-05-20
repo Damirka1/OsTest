@@ -38,8 +38,8 @@ bmain32:
     movw %ax, %gs
 
     # setting stack pointer
-    movw %0x08, %ebp
-    movw %ebp, %esp
+    movl $0x8000, %ebp
+    movl %ebp, %esp
 
     # now we are in protected cpu mode
     # next step is enabling long mode (64 bit)
@@ -126,9 +126,9 @@ bmain:
 
     # now cpu is in long mode (64 bit)
 
-    #mov $0x1F201F201F201F20, %rax
-    #mov $500, %ecx
-    #rep stosq
+    mov $0x1F201F201F201F20, %rax
+    mov $500, %ecx
+    rep stosq
 
     # executing kernel
     call kernel_main

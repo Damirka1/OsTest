@@ -1,16 +1,10 @@
-long* terminal_buffer = (long*)0xb8000;
+#include "terminal.h"
 
-int lines_size = 25;
-int columns_size = 80;
-
-void clear_screen(long long attribute)
-{
-    for(int i = 0; i < lines_size * columns_size; i += 1)
-        terminal_buffer[i] = attribute;
-}
+char str[] = "Hello, world!\n\r";
 
 void kernel_main()
 {
-    clear_screen(0x1F201F201F201F20);
+    SetCursorPosition(PosFromCoords(0, 0));
+    Print(str);
     return;
 }

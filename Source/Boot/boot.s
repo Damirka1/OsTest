@@ -17,16 +17,16 @@ _start:
 	int $0x10
 
 	# print hello world
-	pushw $hello		# $ get pointer of
-	pushw hellosize		# get value of
-	call bprintln
+	#pushw $hello		# $ get pointer of
+	#pushw hellosize		# get value of
+	#call bprintln
 
 	# free stack
 	addw $4, %sp
 
 	# read disk 
 	pushw bmain16		# pointer to buffer
-	pushw $16		# count of sectors to read
+	pushw $32		# count of sectors to read
 	call rdisk
 
 	addw $4, %sp
@@ -36,8 +36,8 @@ _start:
 	hlt
 
 
-hello: .asciz "Hello, BIOS world!"
-hellosize: .word .-hello-1
+#hello: .asciz "Hello, BIOS world!"
+#hellosize: .word .-hello-1
 
 # basic main
 bmain16: .word 0x8000	# buffer for readed code of programm

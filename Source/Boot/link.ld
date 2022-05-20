@@ -23,14 +23,14 @@ SECTIONS
         *(.text)
     }
 
-    .data : ALIGN(0x1000)
-    {
-        *(.data)
-    }
-
     .rodata : ALIGN(0x1000)
     {
         *(.rodata)
+    }
+
+    .data : ALIGN(0x1000)
+    {
+        *(.data)
     }
 
     .bss : ALIGN(0x1000)
