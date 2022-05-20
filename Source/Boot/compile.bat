@@ -6,6 +6,8 @@ del /q bin\boot.o
 
 ..\..\Compiler\yasm-1.3.0-win64.exe -p gas -f elf64 -o bin/bmain.o bmain.s
 
+..\..\Compiler\yasm-1.3.0-win64.exe -f elf64 -o bin/include_binaries.o include_binaries.s
+
 ld.lld -T"linkboot.ld" -N
 ld.lld -T"link.ld" -N
 
