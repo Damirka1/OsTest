@@ -126,10 +126,6 @@ bmain:
 
     # now cpu is in long mode (64 bit)
 
-    mov $0x1F201F201F201F20, %rax
-    mov $500, %ecx
-    rep stosq
-
     # executing kernel
     call kernel_main
 
