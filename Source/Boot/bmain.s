@@ -12,7 +12,7 @@ bmain16:
     outb %al, $0x92
 
     # setting gdt
-    lgdt (gdt_descriptor)
+    lgdt gdt_descriptor
 
     # setting cr0 bit
     movl %cr0, %eax
@@ -38,7 +38,7 @@ bmain32:
     movw %ax, %gs
 
     # setting stack pointer
-    movl $0x8000, %ebp
+    movl $0x9000, %ebp
     movl %ebp, %esp
 
     # now we are in protected cpu mode
@@ -119,6 +119,7 @@ no_long_mode:
     hlt
 
 .code64
+.extern kernel_main
 .section .text
 .globl bmain;
 bmain:

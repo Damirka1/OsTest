@@ -1,14 +1,16 @@
 #ifndef IO_HEADER
 #define IO_HEADER
 
-void outb(unsigned short port, unsigned char value)
+#include "typedef.h"
+
+void outb(uint16 port, uint8 value)
 {
     asm volatile ("outb %0, %1" : : "a"(value), "Nd"(port));
 }
 
-unsigned char inb(unsigned short port)
+uint8 inb(uint16 port)
 {
-    unsigned char value;
+    uint8 value;
     asm volatile ("inb %1, %0"
         : "=a"(value)
         : "Nd"(port));
