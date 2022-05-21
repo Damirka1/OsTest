@@ -8,11 +8,3 @@
 .endm
 
 include_binary file "test.txt"
-
-//     .section .rodata
-//     .globl file2
-// file2:
-//     .incbin "test.txt"
-//     .byte 0
-//     file2_size: .quad file2_size - file2
-    
