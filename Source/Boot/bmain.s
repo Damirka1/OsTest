@@ -20,7 +20,7 @@ bmain16:
     movl %eax, %cr0
 
     # jump to 32 bit basic main
-    jmp 0x08, bmain32
+    ljmp $0x08, $bmain32
 
 
 .include "gdt.s"
@@ -109,7 +109,7 @@ bmain32:
     movl $0b10101111, (gdt_datadesc + 6)
 
     # entering 64 bit main
-    jmp $0x08, bmain
+    ljmp $0x08, $bmain
 
     hlt
 

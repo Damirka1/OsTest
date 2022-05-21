@@ -1,11 +1,18 @@
-%macro include_binary 2
-    SECTION .rodata
-    GLOBAL %1
-%1:
-    incbin %2
-    db 0
-    %1_size: dq %1_size - %1
-%endmacro
+.macro include_binary name, file
+    .section .rodata
+    .globl \name
+\name:
+    .incbin "\file"
+    .byte 0
+    \name\()_size: .quad \name\()_size - \name
+.endm
 
-include_binary file, "test.txt"
+include_binary file "test.txt"
+
+//     .section .rodata
+//     .globl file2
+// file2:
+//     .incbin "test.txt"
+//     .byte 0
+//     file2_size: .quad file2_size - file2
     

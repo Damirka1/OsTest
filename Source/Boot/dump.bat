@@ -1,1 +1,2 @@
-llvm-objdump -d bin/kernel.elf
+wsl %WSLENV%/x86_64-elf-objdump -d bin/kernel.elf
+
