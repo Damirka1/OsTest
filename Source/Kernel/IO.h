@@ -1,16 +1,16 @@
 #ifndef IO_HEADER
 #define IO_HEADER
 
-#include "typedef.h"
+#include "stdint.h"
 
-void outb(uint16 port, uint8 value)
+void outb(uint16_t port, uint8_t value)
 {
     asm volatile ("outb %0, %1" : : "a"(value), "Nd"(port));
 }
 
-uint8 inb(uint16 port)
+uint8_t inb(uint16_t port)
 {
-    uint8 value;
+    uint8_t value;
     asm volatile ("inb %1, %0"
         : "=a"(value)
         : "Nd"(port));

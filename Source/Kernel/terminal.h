@@ -1,38 +1,40 @@
 #ifndef TERMINAL_HEADER
 #define TERMINAL_HEADER
 
+#include "stdint.h"
+
 #include "IO.h"
 #include "TextColorCodes.h"
 
-static uint8* VGABuffer = (unsigned char*)0xb8000;
-static uint16 VGAWidth = 80;
-static uint16 VGAHeight = 25;
+static uint8_t* VGABuffer = (unsigned char*)0xb8000;
+static uint16_t VGAWidth = 80;
+static uint16_t VGAHeight = 25;
 
-static uint16 CursorPosition = 0;
+static uint16_t CursorPosition = 0;
 
-void ClearScreen(int64 color)
+void ClearScreen(int64_t color)
 {
-    int64 value = 0;
+    int64_t value = 0;
     value += color << 8;
     value += color << 24;
     value += color << 40;
     value += color << 56;
 
-    for(int64* i = (long long*)VGABuffer; i < (long long*)(VGABuffer + 4000); i++)
+    for(int64_t* i = (int64_t*)VGABuffer; i < (int64_t*)(VGABuffer + 4000); i++)
         *i = value;
 }
 
-void SetCursorPosition(uint16 position)
+void SetCursorPosition(uint16_t position)
 {
     outb(0x3D4, 0x0F);
-    outb(0x3D5, (uint8)(position & 0xFF));
+    outb(0x3D5, (uint8_t)(position & 0xFF));
     outb(0x3D4, 0x0E);
-    outb(0x3D5, (uint8)((position >> 8) & 0xFF));
+    outb(0x3D5, (uint8_t)((position >> 8) & 0xFF));
 
     CursorPosition = position;
 }
 
-void EnableCursor(uint8 cursor_start, uint8 cursor_end)
+void EnableCursor(uint8_t cursor_start, uint8_t cursor_end)
 {
 	outb(0x3D4, 0x0A);
 	outb(0x3D5, (inb(0x3D5) & 0xC0) | cursor_start);
@@ -47,15 +49,22 @@ void DisableCursor()
 	outb(0x3D5, 0x20);
 }
 
-unsigned short PosFromCoords(uint8 x, uint8 y)
+unsigned short PosFromCoords(uint8_t x, uint8_t y)
 {
     return y * VGAHeight + x;
 }
 
-void PrintStringColored(const int8* str, uint8 color)
+void puts(char ch)
 {
-    int8* it = (int8*)str;
-    uint16 index = CursorPosition;
+    *(VGABuffer + CursorPosition * 2) = ch;
+    CursorPosition++;
+    SetCursorPosition(CursorPosition);
+}
+
+void PrintStringColored(const int8_t* str, uint8_t color)
+{
+    int8_t* it = (int8_t*)str;
+    uint16_t index = CursorPosition;
     while(*it != 0)
     {
         switch (*it)
@@ -73,14 +82,41 @@ void PrintStringColored(const int8* str, uint8 color)
         }
 
         it++;
+
+        if(index >= VGAWidth * VGAHeight)
+            index = 0;
     }
 
     SetCursorPosition(index);
 }
 
-void PrintString(const int8* str)
+void PrintString(const int8_t* str)
 {
     PrintStringColored(str, BACKGROUND_BLACK | FOREGROUND_WHITE);
+}
+
+void PrintStringLn(const int8_t* str)
+{
+    PrintString(str);
+    PrintString((const int8_t*)" ");
+}
+
+static int8_t hexToStringOutput[128];
+const int8_t* HexToString(uint16_t value){
+  uint16_t* valPtr = &value;
+  uint8_t* ptr;
+  uint8_t temp;
+  uint8_t size = (sizeof(uint16_t)) * 2 - 1;
+  uint8_t i;
+  for (i = 0; i < size; i++){
+    ptr = ((uint8_t*)valPtr + i);
+    temp = ((*ptr & 0xF0) >> 4);
+    hexToStringOutput[size - (i * 2 + 1)] = temp + (temp > 9 ? 55 : 48);
+    temp = ((*ptr & 0x0F));
+    hexToStringOutput[size - (i * 2 + 0)] = temp + (temp > 9 ? 55 : 48);
+  }
+  hexToStringOutput[size + 1] = 0;
+  return hexToStringOutput;
 }
 
 #endif

@@ -1,55 +1,40 @@
+.extern _idt
 
-.extern exception_handler
+idt_descriptor:
+    .word 4095
+    .quad _idt
 
-.macro isr_err_stub title
-isr_stub_\title:
-    call exception_handler
-    iretq
+.macro PUSHALL
+    pushq %rax
+    pushq %rcx
+    pushq %rdx
+    pushq %r8
+    pushq %r9
+    pushq %r10
+    pushq %r11
 .endm
 
-.macro isr_no_err_stub 1
-isr_stub_\title:
-    call exception_handler
-    iretq
+.macro POPALL
+    popq %r11
+    popq %r10
+    popq %r9
+    popq %r8
+    popq %rdx
+    popq %rcx
+    popq %rax
 .endm
 
-isr_no_err_stub 0
-isr_no_err_stub 1
-isr_no_err_stub 2
-isr_no_err_stub 3
-isr_no_err_stub 4
-isr_no_err_stub 5
-isr_no_err_stub 6
-isr_no_err_stub 7
-isr_err_stub    8
-isr_no_err_stub 9
-isr_err_stub    10
-isr_err_stub    11
-isr_err_stub    12
-isr_err_stub    13
-isr_err_stub    14
-isr_no_err_stub 15
-isr_no_err_stub 16
-isr_err_stub    17
-isr_no_err_stub 18
-isr_no_err_stub 19
-isr_no_err_stub 20
-isr_no_err_stub 21
-isr_no_err_stub 22
-isr_no_err_stub 23
-isr_no_err_stub 24
-isr_no_err_stub 25
-isr_no_err_stub 26
-isr_no_err_stub 27
-isr_no_err_stub 28
-isr_no_err_stub 29
-isr_err_stub    30
-isr_no_err_stub 31
+.extern isr1_handler
 
-.globl isr_stub_table
-isr_stub_table:
-.assign i 0 
-.rep    32 
-    .quad isr_stub_%+i 
-.assign i i+1 
-.endrep
+.globl isr1
+isr1:
+    PUSHALL
+    call isr1_handler
+    POPALL
+    iretq
+
+.globl load_idt
+load_idt:
+    lidt idt_descriptor
+    sti
+    retq
