@@ -26,7 +26,6 @@ idt_descriptor:
     popq %rdx
     popq %rsi
     popq %rdi
-    
 .endm
 
 .macro reserved name
@@ -100,15 +99,20 @@ isr_with_error_code vmm_communiction_exception
 isr_with_error_code security_exception
 
 // 16 IRQ
-isr hpt
-isr keyboard
+isr hpt         // 0
+isr keyboard    // 1
+
+isr mouse       // 12
+
+// System interrupts
+isr system_test // 16
+isr system_test2 // 17
 
 .globl load_idt
 load_idt:
     lidt idt_descriptor
     sti
     retq
-
 
 .globl remap_pic
 remap_pic:

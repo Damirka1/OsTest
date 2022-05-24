@@ -16,7 +16,11 @@ IsrHandler(divide_by_zero,
     asm volatile("cli; hlt;");
     return;
 })
-IsrHandler(debug, NullFunc)
+IsrHandler(debug, 
+{
+    PrintString("debug test\n\r");
+    return;
+})
 
 IsrHandler(non_maskable, NullFunc)
 IsrHandler(breakpoint, NullFunc)
@@ -58,5 +62,32 @@ IsrHandler(keyboard,
 {
     uint16_t value = inb(0x60);
     PrintString(HexToString(value));
+    return;
+})
+
+IsrHandler(mouse, 
+{
+    uint16_t value = inb(0x60);
+    PrintString(HexToString(value));
+    return;
+})
+
+IsrHandler(system_test, 
+{
+    PrintStringColored("System interrupt test\n\r", FOREGROUND_LIGHTCYAN | BACKGROUND_BLACK);
+    return;
+})
+
+IsrHandler(system_test2, 
+{
+    uint16_t value;
+    
+    asm volatile("movw %%ax, %0"
+        : "=a"(value)
+    );
+    PrintStringColored("System interrupt test2: get value from register ax: ", FOREGROUND_LIGHTMAGENTA | BACKGROUND_BLACK);
+    PrintStringColored(HexToString(value), FOREGROUND_GREEN | BACKGROUND_BLACK);
+    PrintString("\n\r");
+
     return;
 })

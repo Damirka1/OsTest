@@ -64,40 +64,40 @@ static void SetExceptions()
 	//IdtSetDescriptor(31, &divide_by_zero_isr, 0x8E); // reserved
 }
 
-void SetIRQ()
+static void SetIRQ()
 {
 	// Timer interrupt
 	IdtSetDescriptor(32, &hpt_isr, 0x8E);
 	// Keyboard interrupt
 	IdtSetDescriptor(33, &keyboard_isr, 0x8E);
 	// // Mouse interrupt
-	// IdtSetDescriptor(44, &isr1, 0x8E);
+	IdtSetDescriptor(44, &mouse_isr, 0x8E);
 	// // Primary ATA Hard Disk interrupt
 	// IdtSetDescriptor(46, &isr1, 0x8E);
 }
 
-void ExceptionsTest()
+static void SetSystemInterrupts()
 {
-	// testing divide by zero exception
-	asm volatile(" movl $0, %edx; movl $0, %eax; movl $0, %ecx; divl %ecx;");
+	IdtSetDescriptor(48, &system_test_isr, 0x8E);
+	IdtSetDescriptor(49, &system_test2_isr, 0x8E);
 }
 
 void InitializeIDT()
 {
-
 	// Set up exceptions (0 - 31)
 	SetExceptions();
 
 	// Set up IRQs (32 - 47)
 	SetIRQ();
+
+	// Set up system interrupts (48 - 255)
+	SetSystemInterrupts();
 	
 	outb(0x21, 0xfd);
 	outb(0xa1, 0xff);
 	load_idt();
 
 	remap_pic();
-
-	ExceptionsTest();
 }
 
 
