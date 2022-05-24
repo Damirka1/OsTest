@@ -131,6 +131,7 @@ bmain:
     # executing kernel
     call kernel_main
 
+    cli
     hlt
 
 

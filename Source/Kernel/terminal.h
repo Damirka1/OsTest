@@ -61,9 +61,9 @@ void puts(char ch)
     SetCursorPosition(CursorPosition);
 }
 
-void PrintStringColored(const int8_t* str, uint8_t color)
+void PrintStringColored(const char* str, uint8_t color)
 {
-    int8_t* it = (int8_t*)str;
+    char* it = (char*)str;
     uint16_t index = CursorPosition;
     while(*it != 0)
     {
@@ -90,19 +90,13 @@ void PrintStringColored(const int8_t* str, uint8_t color)
     SetCursorPosition(index);
 }
 
-void PrintString(const int8_t* str)
+void PrintString(const char* str)
 {
     PrintStringColored(str, BACKGROUND_BLACK | FOREGROUND_WHITE);
 }
 
-void PrintStringLn(const int8_t* str)
-{
-    PrintString(str);
-    PrintString((const int8_t*)" ");
-}
-
-static int8_t hexToStringOutput[128];
-const int8_t* HexToString(uint16_t value){
+static char hexToStringOutput[128];
+const char* HexToString(uint16_t value){
   uint16_t* valPtr = &value;
   uint8_t* ptr;
   uint8_t temp;

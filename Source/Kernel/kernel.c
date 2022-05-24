@@ -1,7 +1,7 @@
 #include "terminal.h"
 #include "idt.h"
 
-extern const int8_t file[];
+extern const char file[];
 
 void kernel_main()
 {
@@ -12,8 +12,6 @@ void kernel_main()
 
     InitializeIDT();
 
-    // Вот из-за этой ерунды снизу я не спалл всю ночь, пытаясь разобраться
-    // почему не работают прерывания.
     while(1);
 
     return;
